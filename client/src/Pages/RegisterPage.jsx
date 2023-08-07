@@ -51,7 +51,7 @@ const RegisterPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button className="login" type="submit">
+          <button className="primary" type="submit">
             Submit
           </button>
           <div className="text-center py-2 text-gray-500">

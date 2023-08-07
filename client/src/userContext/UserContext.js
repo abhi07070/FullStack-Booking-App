@@ -5,22 +5,19 @@ export const UserContext = createContext({});
 
 export function UserContextProvider({ children }) {
   const [user, setUser] = useState(null);
-  const [ready, setReady] = useState(false);
-
   const getUserProfile = () => {
     if (!user) {
-      axios.get("/api/auth/profile").then(({ data }) => {
-        setUser(data);
-        setReady(true);
+      axios.get("/api/auth/profile").then((res) => {
+        setUser(res.data.userInfo);
       });
     }
   };
 
   useEffect(() => {
     getUserProfile();
-  }, [user]);
+  }, []);
   return (
-    <UserContext.Provider value={{ user, setUser, ready }}>
+    <UserContext.Provider value={{ user, setUser }}>
       {children}
     </UserContext.Provider>
   );

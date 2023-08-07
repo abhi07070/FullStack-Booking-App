@@ -22,9 +22,8 @@ const LoginPage = () => {
 
       if (res && res.data.success) {
         toast.success(res.data && res.data.message);
-        console.log(res.data);
         navigate("/");
-        setUser(res.data);
+        setUser(res.data.user);
       } else {
         toast.error(res.data.message);
       }
@@ -50,7 +49,7 @@ const LoginPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button className="login" type="submit">
+          <button className="primary" type="submit">
             Login
           </button>
           <div className="text-center py-2 text-gray-500">

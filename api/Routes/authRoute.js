@@ -1,6 +1,7 @@
 import express from "express";
 import {
   loginController,
+  logoutController,
   profileController,
   registerController,
 } from "../Controllers/authController.js";
@@ -13,7 +14,10 @@ router.post("/register", registerController);
 // login
 router.post("/login", loginController);
 
-//profile
+// profile
 router.get("/profile", profileController);
+
+// logout
+router.post("/logout", logoutController);
 
 export default router;

@@ -111,7 +111,12 @@ export const profileController = async (req, res) => {
     if (token) {
       const user = JWT.verify(token, process.env.JWT_SECRET);
       const { name, email, _id } = await userModel.findById(user.id);
-      res.json({ name, email, _id });
+      const userInfo = { name, email, _id };
+      res.status(200).send({
+        success: true,
+        message: "User data fetched successfully",
+        userInfo,
+      });
     }
   } catch (error) {
     res.status(500).json({
@@ -120,4 +125,8 @@ export const profileController = async (req, res) => {
       error: error.message,
     });
   }
+};
+
+export const logoutController = async (req, res) => {
+  res.cookie("token", "").json(true);
 };

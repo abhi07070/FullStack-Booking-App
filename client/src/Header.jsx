@@ -1,10 +1,14 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { UserContext } from "./userContext/UserContext";
 
 const Header = () => {
   const { user } = useContext(UserContext);
-  // console.log(user.name);
+  const [currentUser, setCurrentUser] = useState(user);
+  useEffect(() => {
+    setCurrentUser(user);
+  }, [user]);
+
   return (
     <>
       <header className="flex justify-between">
@@ -80,7 +84,7 @@ const Header = () => {
               />
             </svg>
           </div>
-          {!!user && <div>{user.name}</div>}
+          {!!currentUser && <div>{currentUser.name}</div>}
         </Link>
       </header>
     </>
