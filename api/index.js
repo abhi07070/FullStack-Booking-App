@@ -5,6 +5,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import authRoutes from "./Routes/authRoute.js";
+import uploadRoutes from "./Routes/uploadRoute.js";
 import cookieParser from "cookie-parser";
 // config env
 dotenv.config();
@@ -18,12 +19,7 @@ const app = express();
 app.use(express.json());
 app.use(cookieParser());
 app.use(morgan("dev"));
-app.use(
-  cors({
-    credentials: true,
-    origin: "http://localhost:3000",
-  })
-);
+app.use(cors());
 
 app.get("/test", (req, res) => {
   res.json("test ok");
@@ -31,6 +27,7 @@ app.get("/test", (req, res) => {
 
 // routes
 app.use("/api/auth", authRoutes);
+app.use("/api/auth", uploadRoutes);
 
 app.listen(5000, (req, res) => {
   console.log("Listening server".bgCyan.white);
