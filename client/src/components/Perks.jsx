@@ -1,6 +1,6 @@
 import React from "react";
 
-const Perks = ({ selected, onChange }) => {
+const Perks = ({ selected = [], onChange }) => {
   function handleCbClick(ev) {
     const { checked, name } = ev.target;
     if (checked) {

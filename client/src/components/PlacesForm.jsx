@@ -1,11 +1,13 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PhotosUploader from "./PhotosUploader";
 import Perks from "./Perks";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AccountNav from "./AccountNav";
+import toast from "react-hot-toast";
 
 const PlacesForm = () => {
+  const { id } = useParams();
   const [title, setTitle] = useState("");
   const [address, setAddress] = useState("");
   const [addedPhotos, setAddedPhotos] = useState([]);
@@ -17,6 +19,23 @@ const PlacesForm = () => {
   const [maxGuests, setMaxGuests] = useState(1);
   const [price, setPrice] = useState(100);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!id) return;
+    axios.get(`/api/auth/places/${id}`).then((res) => {
+      const data = res.data.place;
+      setTitle(data.title);
+      setAddress(data.address);
+      setAddedPhotos(data.photos);
+      setDescription(data.description);
+      setPerks(data.perks);
+      setExtraInfo(data.extraInfo);
+      setCheckIn(data.checkIn);
+      setCheckOut(data.checkOut);
+      setMaxGuests(data.maxGuests);
+      setPrice(data.price);
+    });
+  }, []);
 
   function inputHeader(text) {
     return <h2 className="text-2xl mt-4">{text}</h2>;
@@ -33,26 +52,41 @@ const PlacesForm = () => {
     );
   }
 
-  async function addNewPlace(e) {
+  async function savePlace(e) {
     e.preventDefault();
-    const placeData = {
-      title,
-      address,
-      addedPhotos,
-      description,
-      perks,
-      extraInfo,
-      checkIn,
-      checkOut,
-      maxGuests,
-    };
-    await axios.post("/api/auth/places", placeData);
-    navigate("/account/places");
+
+    try {
+      const placeData = {
+        title,
+        address,
+        addedPhotos,
+        description,
+        perks,
+        extraInfo,
+        checkIn,
+        checkOut,
+        maxGuests,
+      };
+      if (id) {
+        // update
+        const { response } = await axios.put(`/api/auth/places`, {
+          id,
+          ...placeData,
+        });
+        navigate("/account/places");
+        toast.success("Place updated successfully");
+      } else {
+        // new place
+        await axios.post("/api/auth/places", placeData);
+        navigate("/account/places");
+        toast.success("Place added successfully");
+      }
+    } catch (error) {}
   }
   return (
     <div>
       <AccountNav />
-      <form onSubmit={addNewPlace}>
+      <form onSubmit={savePlace}>
         {preInput(
           "Title",
           "Title for your place. should be short and catchy as in advertisement"

@@ -53,7 +53,8 @@ const PhotosUploader = ({ addedPhotos, onChange }) => {
       </div>
 
       <div className="grid gap-2 grid-cols-3 md:grid-cols-4 lg:grid-cols-6 mt-2">
-        {addedPhotos.length > 0 &&
+        {addedPhotos &&
+          addedPhotos.length > 0 &&
           addedPhotos.map((link, index) => (
             <div key={index} className="h-32 flex">
               <img
