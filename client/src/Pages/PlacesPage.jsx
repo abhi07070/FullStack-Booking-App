@@ -5,7 +5,7 @@ import axios from "axios";
 const PlacesPage = () => {
   const [places, setPlaces] = useState("");
   useEffect(() => {
-    axios.get("/api/auth/places").then((response) => {
+    axios.get("/api/auth/user-places").then((response) => {
       setPlaces(response.data.places);
     });
   }, []);

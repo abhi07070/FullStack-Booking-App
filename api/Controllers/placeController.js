@@ -13,6 +13,7 @@ export const placeController = async (req, res) => {
     checkIn,
     checkOut,
     maxGuests,
+    price,
   } = req.body;
 
   try {
@@ -30,6 +31,7 @@ export const placeController = async (req, res) => {
         checkIn,
         checkOut,
         maxGuests,
+        price,
       });
       res.status(200).send({
         success: true,
@@ -44,7 +46,7 @@ export const placeController = async (req, res) => {
   }
 };
 
-export const getPlacesController = async (req, res) => {
+export const getUserPlaceController = async (req, res) => {
   try {
     const { token } = req.cookies;
     JWT.verify(token, process.env.JWT_SECRET, {}, async (err, userData) => {
@@ -53,14 +55,14 @@ export const getPlacesController = async (req, res) => {
       res.status(200).send({
         places,
         success: true,
-        message: "Places fetched successfully",
+        message: "Place fetched successfully",
       });
     });
   } catch (error) {
     res.status(500).send({
       error,
       success: false,
-      message: "Errro while getting place",
+      message: "Errro while getting user place",
     });
   }
 };
@@ -97,6 +99,7 @@ export const updatePlaceController = async (req, res) => {
       checkIn,
       checkOut,
       maxGuests,
+      price,
     } = req.body;
 
     JWT.verify(token, process.env.JWT_SECRET, {}, async (err, userData) => {
@@ -113,6 +116,7 @@ export const updatePlaceController = async (req, res) => {
           checkIn,
           checkOut,
           maxGuests,
+          price,
         });
         await placeDoc.save();
         res.status(200).send({
@@ -126,6 +130,23 @@ export const updatePlaceController = async (req, res) => {
       error,
       success: false,
       message: "Errro while updating place",
+    });
+  }
+};
+
+export const getPlacesController = async (req, res) => {
+  try {
+    const places = await Place.find();
+    res.status(200).send({
+      places,
+      success: true,
+      message: "Places fetched successfully",
+    });
+  } catch (error) {
+    res.status(500).send({
+      error,
+      success: false,
+      message: "Errro while getting places",
     });
   }
 };

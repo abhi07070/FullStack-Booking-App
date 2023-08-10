@@ -66,6 +66,7 @@ const PlacesForm = () => {
         checkIn,
         checkOut,
         maxGuests,
+        price,
       };
       if (id) {
         // update
@@ -125,7 +126,7 @@ const PlacesForm = () => {
           "Check in&out times",
           "add check in and out times, remember to have some time window for cleaning the room between guests"
         )}
-        <div className="grid gap-2 sm:grid-cols-3">
+        <div className="grid gap-2 grid-cols-2 md:grid-cols-4">
           <div>
             <h3 className="mt-2 -mb-1">Check in time</h3>
             <input
