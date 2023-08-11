@@ -6,7 +6,7 @@ const IndexPage = () => {
 
   useEffect(() => {
     axios.get("/api/auth/places").then((res) => {
-      setPlaces([...res.data.places, ...res.data.places]);
+      setPlaces([...res.data.places]);
     });
   }, []);
   return (
