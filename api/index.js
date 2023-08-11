@@ -7,6 +7,7 @@ import connectDB from "./config/db.js";
 import authRoutes from "./Routes/authRoute.js";
 import uploadRoutes from "./Routes/uploadRoute.js";
 import placeRoutes from "./Routes/placeRoute.js";
+import bookingRoutes from "./Routes/bookingRoute.js";
 import cookieParser from "cookie-parser";
 import { fileURLToPath } from "url"; // Import the fileURLToPath function
 import path from "path"; // Import the path module
@@ -39,6 +40,7 @@ app.get("/test", (req, res) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/auth", uploadRoutes);
 app.use("/api/auth", placeRoutes);
+app.use("/api/auth", bookingRoutes);
 
 app.listen(5000, (req, res) => {
   console.log("Listening server".bgCyan.white);
