@@ -1,4 +1,4 @@
-# MockUp
+# Booking App
 
 ## Description
 
