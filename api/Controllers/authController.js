@@ -73,8 +73,8 @@ export const loginController = async (req, res) => {
       });
     }
 
-    const match = await comaprePassword(password, user.password);
-    if (!match) {
+    const passMatch = await comaprePassword(password, user.password);
+    if (!passMatch) {
       return res.status(200).json({
         success: false,
         message: "Invalid Password",

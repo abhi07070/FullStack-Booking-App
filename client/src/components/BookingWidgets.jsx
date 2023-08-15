@@ -4,6 +4,7 @@ import { differenceInCalendarDays } from "date-fns";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
+
 const BookingWidgets = ({ place }) => {
   const [checkIn, setCheckIn] = useState("");
   const [checkOut, setCheckOut] = useState("");
@@ -13,12 +14,6 @@ const BookingWidgets = ({ place }) => {
   const { user } = useContext(UserContext);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    if (user) {
-      setName(user.name);
-    }
-  }, [user]);
-
   let numberOfNights = 0;
   if (checkIn && checkOut) {
     numberOfNights = differenceInCalendarDays(
@@ -27,20 +22,41 @@ const BookingWidgets = ({ place }) => {
     );
   }
 
-  async function bookThisPlace() {
-    const response = await axios.post("/api/auth/bookings", {
-      checkIn,
-      checkOut,
-      numberOfGuests,
-      name,
-      phone,
-      place: place._id,
-      price: numberOfNights * place.price,
-    });
-    toast.success("Booking done successfully");
-    const bookingId = response.data.doc._id;
-    navigate(`/account/bookings/${bookingId}`);
-  }
+  const isFormValid =
+    checkIn && checkOut && numberOfGuests > 0 && name && phone;
+
+  const bookThisPlace = async () => {
+    try {
+      if (checkIn === checkOut) {
+        toast.error("Check-in and check-out dates cannot be the same.");
+        return;
+      }
+
+      if (!isFormValid) {
+        toast.error("Please fill out all the required fields.");
+        return;
+      }
+
+      const response = await axios.post("/api/auth/bookings", {
+        checkIn,
+        checkOut,
+        numberOfGuests,
+        name,
+        phone,
+        place: place._id,
+        price: numberOfNights * place.price,
+      });
+
+      toast.success("Booking done successfully");
+      const bookingId = response.data.doc._id;
+      navigate(`/account/bookings/${bookingId}`);
+    } catch (error) {
+      toast.error("An error occurred while booking.");
+    }
+  };
+
+  const enabledButtonClass = isFormValid ? "primary" : "disabled";
+
   return (
     <>
       <div className="bg-white shadow p-4 rounded-2xl">
@@ -91,7 +107,11 @@ const BookingWidgets = ({ place }) => {
             </div>
           )}
         </div>
-        <button onClick={bookThisPlace} className="primary mt-4">
+        <button
+          onClick={bookThisPlace}
+          className={`mt-4 ${enabledButtonClass}`}
+          disabled={!isFormValid}
+        >
           Book this place
           {numberOfNights > 0 && <span> ${numberOfNights * place.price}</span>}
         </button>

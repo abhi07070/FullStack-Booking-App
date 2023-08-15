@@ -9,6 +9,12 @@ const RegisterPage = () => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
+  const emailIsValid = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
+    return emailRegex.test(email);
+  };
+  const isFormValid = name && emailIsValid(email) && password;
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -28,6 +34,7 @@ const RegisterPage = () => {
       toast.error("Something went wrong");
     }
   };
+  const enabledButtonClass = isFormValid ? "primary" : "disabled";
   return (
     <div className="mt-4 grow flex items-center justify-around">
       <div className="mb-32">
@@ -51,7 +58,11 @@ const RegisterPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button className="primary" type="submit">
+          <button
+            className={enabledButtonClass}
+            type="submit"
+            disabled={!isFormValid}
+          >
             Submit
           </button>
           <div className="text-center py-2 text-gray-500">

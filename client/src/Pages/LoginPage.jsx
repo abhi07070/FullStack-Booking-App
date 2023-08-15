@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { toast } from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../userContext/UserContext";
@@ -10,10 +10,21 @@ const LoginPage = () => {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
 
+  const emailIsValid = (email) => {
+    const emailRegex = /^[a-zA-Z0-9._-]+@gmail\.com$/;
+    return emailRegex.test(email);
+  };
+  const isFormValid = emailIsValid(email) && password;
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
+      if (!isFormValid) {
+        toast.error("Please enter a valid Gmail address and password.");
+        return;
+      }
+
       const res = await axios.post(
         `/api/auth/login`,
         { email, password },
@@ -32,6 +43,8 @@ const LoginPage = () => {
     }
   };
 
+  const enabledButtonClass = isFormValid ? "primary" : "disabled";
+
   return (
     <div className="mt-4 grow flex items-center justify-around">
       <div className="mb-32">
@@ -49,7 +62,11 @@ const LoginPage = () => {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <button className="primary" type="submit">
+          <button
+            className={enabledButtonClass}
+            type="submit"
+            disabled={!isFormValid}
+          >
             Login
           </button>
           <div className="text-center py-2 text-gray-500">

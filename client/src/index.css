@@ -22,3 +22,7 @@ button {
 button.primary {
   @apply bg-primary p-1.5 mt-2 w-full text-white rounded-2xl;
 }
+
+button.disabled {
+  @apply bg-disabled p-1.5 mt-2 w-full text-white rounded-2xl;
+}
